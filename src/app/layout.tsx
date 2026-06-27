@@ -4,6 +4,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,11 +34,13 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <AuthProvider>
+          <WishlistProvider>
           <CartProvider>
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
           </CartProvider>
+          </WishlistProvider>
         </AuthProvider>
       </body>
     </html>

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllProducts, getProductBySlug } from "@/lib/products";
 import AddToCartButton from "@/components/product/AddToCartButton";
+import WishlistButton from "@/components/product/WishlistButton";
 
 export async function generateStaticParams() {
   return getAllProducts().map((p) => ({ slug: p.slug }));
@@ -71,9 +72,7 @@ export default async function ProductDetailPage(props: { params: Promise<{ slug:
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <AddToCartButton product={product} />
-              <button className="px-8 py-3 border border-gray-200 hover:border-primary text-gray-700 hover:text-primary font-semibold rounded-lg transition-all">
-                Add to Wishlist
-              </button>
+              <WishlistButton product={product} />
             </div>
 
             <div className="mt-8 pt-6 border-t border-gray-100">

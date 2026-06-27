@@ -1,17 +1,10 @@
 import Link from "next/link";
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-}
+import type { Product } from "@/lib/products";
 
 export default function ProductCard({ product }: { product: Product }) {
   return (
     <Link
-      href={`/products/${product.id}`}
+      href={`/products/${product.slug}`}
       className="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all overflow-hidden"
     >
       <div className="aspect-square bg-gray-50 flex items-center justify-center p-8">

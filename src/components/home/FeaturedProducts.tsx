@@ -1,15 +1,7 @@
+import { getAllProducts } from "@/lib/products";
 import ProductCard from "@/components/product/ProductCard";
 
-const featuredProducts = [
-  { id: "1", name: "Arduino Uno R3 Board", price: 24.99, image: "/products/arduino-uno.jpg", category: "Boards" },
-  { id: "2", name: "HC-SR04 Ultrasonic Sensor", price: 3.49, image: "/products/hc-sr04.jpg", category: "Sensors" },
-  { id: "3", name: "Soldering Iron Kit 60W", price: 18.99, image: "/products/soldering-kit.jpg", category: "Tools" },
-  { id: "4", name: "Arduino Starter Kit", price: 39.99, image: "/products/starter-kit.jpg", category: "Kits" },
-  { id: "5", name: "Breadboard + Jumper Wires", price: 5.99, image: "/products/breadboard.jpg", category: "Accessories" },
-  { id: "6", name: "RGB LED Module", price: 2.99, image: "/products/rgb-led.jpg", category: "Components" },
-  { id: "7", name: "Arduino Nano V3.0", price: 14.99, image: "/products/arduino-nano.jpg", category: "Boards" },
-  { id: "8", name: "5V Relay Module 4-Channel", price: 7.99, image: "/products/relay.jpg", category: "Modules" },
-];
+const featuredProducts = getAllProducts().slice(0, 8);
 
 export default function FeaturedProducts() {
   return (

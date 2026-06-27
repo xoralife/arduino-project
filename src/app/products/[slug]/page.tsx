@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getAllProducts, getProductBySlug } from "@/lib/products";
 import AddToCartButton from "@/components/product/AddToCartButton";
 import WishlistButton from "@/components/product/WishlistButton";
+import ReviewSection from "@/components/review/ReviewSection";
 
 export async function generateStaticParams() {
   return getAllProducts().map((p) => ({ slug: p.slug }));
@@ -88,6 +89,10 @@ export default async function ProductDetailPage(props: { params: Promise<{ slug:
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="max-w-3xl mx-auto">
+          <ReviewSection productId={product.id} productName={product.name} />
         </div>
       </div>
     </div>

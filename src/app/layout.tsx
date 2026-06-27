@@ -8,6 +8,7 @@ import { WishlistProvider } from "@/context/WishlistContext";
 import { ReviewProvider } from "@/context/ReviewContext";
 import { FeedbackProvider } from "@/context/FeedbackContext";
 import { ToastProvider } from "@/components/ui/Toast";
+import BackToTop from "@/components/ui/BackToTop";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -45,6 +46,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />
+            <BackToTop />
           </CartProvider>
           </FeedbackProvider>
           </ReviewProvider>

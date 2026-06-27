@@ -11,7 +11,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => boolean;
+  login: (username: string, password: string) => boolean;
   register: (name: string, email: string, password: string) => boolean;
   logout: () => void;
   isAuthenticated: boolean;
@@ -20,22 +20,22 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const ADMIN_EMAIL = "admin";
+const ADMIN_USERNAME = "admin";
 const ADMIN_PASSWORD = "admin123";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = useCallback((email: string, password: string) => {
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      setUser({ id: "1", name: "Admin", email, role: "admin" });
+  const login = useCallback((username: string, password: string) => {
+    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+      setUser({ id: "1", name: "Admin", email: "admin@electrokit.com", role: "admin" });
       return true;
     }
-    const stored = localStorage.getItem(`user_${email}`);
+    const stored = localStorage.getItem(`user_${username}`);
     if (stored) {
       const data = JSON.parse(stored);
       if (data.password === password) {
-        setUser({ id: data.id, name: data.name, email, role: "user" });
+        setUser({ id: data.id, name: data.name, email: username, role: "user" });
         return true;
       }
     }
@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const register = useCallback((name: string, email: string, password: string) => {
-    if (email === ADMIN_EMAIL) return false;
+    if (email === ADMIN_USERNAME) return false;
     const existing = localStorage.getItem(`user_${email}`);
     if (existing) return false;
     const newUser = { id: Date.now().toString(), name, password };

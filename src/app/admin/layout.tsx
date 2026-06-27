@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
@@ -9,21 +9,32 @@ const sidebarLinks = [
   { label: "Dashboard", href: "/admin", icon: "📊" },
   { label: "Products", href: "/admin/products", icon: "📦" },
   { label: "Orders", href: "/admin/orders", icon: "📋" },
-  { label: "Categories", href: "/admin/categories", icon: "🏷️" },
+  { label: "Users", href: "/admin/users", icon: "👥" },
+  { label: "Reviews", href: "/admin/reviews", icon: "⭐" },
+  { label: "Settings", href: "/admin/settings", icon: "⚙️" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { isAdmin, isAuthenticated } = useAuth();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/auth/login");
+    } else if (!isAdmin) {
+      router.push("/");
+    } else {
+      setLoading(false);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isAdmin, router]);
 
-  if (!isAuthenticated) {
-    return null;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
   return (
@@ -34,7 +45,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span className="text-accent">Admin</span> Panel
           </Link>
         </div>
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-0.5">
           {sidebarLinks.map((link) => (
             <Link
               key={link.href}

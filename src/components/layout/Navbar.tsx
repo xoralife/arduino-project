@@ -10,6 +10,7 @@ const navLinks = [
   { label: "Products", href: "/products" },
   { label: "Kits", href: "/kits" },
   { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {

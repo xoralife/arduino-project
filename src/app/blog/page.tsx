@@ -9,7 +9,7 @@ const posts = [
     category: "Tutorial",
     slug: "getting-started-arduino",
     image: "🔌",
-    color: "from-blue-500 to-blue-600",
+    color: "from-sky-500 to-sky-700",
   },
   {
     title: "How to Use an Ultrasonic Sensor (HC-SR04) with Arduino",
@@ -19,7 +19,7 @@ const posts = [
     category: "Guide",
     slug: "ultrasonic-sensor-guide",
     image: "📡",
-    color: "from-green-500 to-green-600",
+    color: "from-emerald-500 to-emerald-700",
   },
   {
     title: "Top 10 Arduino Projects for Kids",
@@ -29,7 +29,7 @@ const posts = [
     category: "Projects",
     slug: "top-10-arduino-projects-kids",
     image: "🧒",
-    color: "from-orange-500 to-orange-600",
+    color: "from-amber-500 to-amber-700",
   },
   {
     title: "Complete Guide to Soldering for Beginners",
@@ -39,7 +39,7 @@ const posts = [
     category: "Tutorial",
     slug: "soldering-beginners-guide",
     image: "🔥",
-    color: "from-red-500 to-red-600",
+    color: "from-rose-500 to-rose-700",
   },
   {
     title: "Building a Smart Home with Arduino",
@@ -49,7 +49,7 @@ const posts = [
     category: "Projects",
     slug: "smart-home-arduino",
     image: "🏠",
-    color: "from-purple-500 to-purple-600",
+    color: "from-violet-500 to-violet-700",
   },
   {
     title: "Understanding Arduino Sensors: A Complete Guide",
@@ -59,7 +59,7 @@ const posts = [
     category: "Guide",
     slug: "arduino-sensors-guide",
     image: "🔍",
-    color: "from-teal-500 to-teal-600",
+    color: "from-cyan-500 to-cyan-700",
   },
 ];
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -14,6 +15,7 @@ const navLinks = [
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { totalItems } = useCart();
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
   return (
     <nav className="bg-primary text-white shadow-md">
@@ -62,12 +64,32 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
-            <Link
-              href="/auth/login"
-              className="hidden sm:inline-flex items-center gap-1 px-4 py-2 bg-secondary hover:bg-secondary/90 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              Sign In
-            </Link>
+            {isAuthenticated ? (
+              <div className="hidden sm:flex items-center gap-3">
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    className="text-sm font-medium text-gray-200 hover:text-white transition-colors"
+                  >
+                    Admin
+                  </Link>
+                )}
+                <span className="text-sm text-gray-300">{user?.name}</span>
+                <button
+                  onClick={logout}
+                  className="px-4 py-2 border border-white/20 hover:bg-white/10 text-white text-sm font-medium rounded-lg transition-colors"
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/auth/login"
+                className="hidden sm:inline-flex items-center gap-1 px-4 py-2 bg-secondary hover:bg-secondary/90 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                Sign In
+              </Link>
+            )}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               className="md:hidden p-2 text-gray-200 hover:text-white"
@@ -113,13 +135,34 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/auth/login"
-              onClick={() => setMenuOpen(false)}
-              className="block text-center px-4 py-2 bg-secondary hover:bg-secondary/90 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              Sign In
-            </Link>
+            {isAuthenticated ? (
+              <>
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setMenuOpen(false)}
+                    className="block text-sm font-medium text-gray-200 hover:text-white"
+                  >
+                    Admin Panel
+                  </Link>
+                )}
+                <span className="block text-sm text-gray-400 px-1">{user?.name}</span>
+                <button
+                  onClick={() => { logout(); setMenuOpen(false); }}
+                  className="block text-center px-4 py-2 border border-white/20 hover:bg-white/10 text-white text-sm font-medium rounded-lg"
+                >
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/auth/login"
+                onClick={() => setMenuOpen(false)}
+                className="block text-center px-4 py-2 bg-secondary hover:bg-secondary/90 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       )}

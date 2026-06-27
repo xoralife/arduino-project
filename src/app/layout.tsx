@@ -7,6 +7,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { ReviewProvider } from "@/context/ReviewContext";
 import { FeedbackProvider } from "@/context/FeedbackContext";
+import { ToastProvider } from "@/components/ui/Toast";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,6 +37,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col pt-16">
         <AuthProvider>
+          <ToastProvider>
           <WishlistProvider>
           <ReviewProvider>
           <FeedbackProvider>
@@ -47,6 +49,7 @@ export default function RootLayout({
           </FeedbackProvider>
           </ReviewProvider>
           </WishlistProvider>
+          </ToastProvider>
         </AuthProvider>
       </body>
     </html>

@@ -1,24 +1,28 @@
 import { getAllProducts } from "@/lib/products";
+import Link from "next/link";
 import ProductCard from "@/components/product/ProductCard";
 
 const featuredProducts = getAllProducts().slice(0, 8);
 
 export default function FeaturedProducts() {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-20 bg-surface">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-end justify-between mb-10">
           <div>
-            <span className="text-xs font-semibold text-secondary uppercase tracking-widest">
+            <span className="text-xs font-semibold text-secondary uppercase tracking-[0.15em]">
               Featured
             </span>
-            <h2 className="mt-1 text-2xl sm:text-3xl font-bold text-gray-900">
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">
               Popular Products
             </h2>
+            <p className="mt-2 text-gray-500 max-w-md">
+              Bestselling electronics components and kits for your next project
+            </p>
           </div>
-          <a
+          <Link
             href="/products"
-            className="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            className="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 bg-primary/5 hover:bg-primary/10 text-primary text-sm font-medium rounded-xl transition-colors"
           >
             View All
             <svg
@@ -32,12 +36,12 @@ export default function FeaturedProducts() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M9 5l7 7-7 7"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
               />
             </svg>
-          </a>
+          </Link>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8">
           {featuredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

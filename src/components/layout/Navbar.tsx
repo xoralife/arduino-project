@@ -18,7 +18,7 @@ export default function Navbar() {
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
   return (
-    <nav className="bg-primary text-white shadow-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-primary/80 backdrop-blur-lg border-b border-white/10 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
@@ -32,17 +32,17 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-gray-200 hover:text-white transition-colors"
+                className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent after:transition-all hover:after:w-full"
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Link
               href="/wishlist"
-              className="p-2 text-gray-200 hover:text-white transition-colors"
+              className="p-2 text-gray-300 hover:text-white transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/cart"
-              className="relative p-2 text-gray-200 hover:text-white transition-colors"
+              className="relative p-2 text-gray-300 hover:text-white transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -88,12 +88,12 @@ export default function Navbar() {
                 {isAdmin && (
                   <Link
                     href="/admin"
-                    className="text-sm font-medium text-gray-200 hover:text-white transition-colors"
+                    className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
                   >
                     Admin
                   </Link>
                 )}
-                <span className="text-sm text-gray-300">{user?.name}</span>
+                <span className="text-sm text-gray-400">{user?.name}</span>
                 <button
                   onClick={logout}
                   className="px-4 py-2 border border-white/20 hover:bg-white/10 text-white text-sm font-medium rounded-lg transition-colors"
@@ -142,7 +142,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden bg-primary/95 border-t border-white/10">
+        <div className="md:hidden bg-primary/90 backdrop-blur-lg border-t border-white/10">
           <div className="px-4 py-4 space-y-3">
             {navLinks.map((link) => (
               <Link

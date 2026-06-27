@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAllProducts, getProductBySlug } from "@/lib/products";
+import AddToCartButton from "@/components/product/AddToCartButton";
 
 export async function generateStaticParams() {
   return getAllProducts().map((p) => ({ slug: p.slug }));
@@ -69,9 +70,7 @@ export default async function ProductDetailPage(props: { params: Promise<{ slug:
             <p className="mt-6 text-gray-600 leading-relaxed">{product.description}</p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <button className="flex-1 px-8 py-3 bg-secondary hover:bg-secondary/90 text-white font-semibold rounded-lg transition-all">
-                Add to Cart
-              </button>
+              <AddToCartButton product={product} />
               <button className="px-8 py-3 border border-gray-200 hover:border-primary text-gray-700 hover:text-primary font-semibold rounded-lg transition-all">
                 Add to Wishlist
               </button>

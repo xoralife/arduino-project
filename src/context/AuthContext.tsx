@@ -20,7 +20,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-const ADMIN_EMAIL = "admin@electrokit.com";
+const ADMIN_EMAIL = "admin";
 const ADMIN_PASSWORD = "admin123";
 
 export function AuthProvider({ children }: { children: ReactNode }) {

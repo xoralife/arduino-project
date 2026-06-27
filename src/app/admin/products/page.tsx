@@ -15,10 +15,11 @@ export default function AdminProductsPage() {
     price: "",
     category: "Boards",
     stock: "0",
+    image: "",
   });
 
   const resetForm = () => {
-    setForm({ name: "", slug: "", description: "", price: "", category: "Boards", stock: "0" });
+    setForm({ name: "", slug: "", description: "", price: "", category: "Boards", stock: "0", image: "" });
     setShowForm(false);
     setEditId(null);
   };
@@ -28,7 +29,7 @@ export default function AdminProductsPage() {
     if (editId) {
       setProducts(products.map((p) =>
         p.id === editId
-          ? { ...p, name: form.name, slug: form.slug || p.slug, description: form.description, price: parseFloat(form.price), category: form.category, stock: parseInt(form.stock) }
+          ? { ...p, name: form.name, slug: form.slug || p.slug, description: form.description, price: parseFloat(form.price), image: form.image || p.image, category: form.category, stock: parseInt(form.stock) }
           : p
       ));
     } else {
@@ -38,7 +39,7 @@ export default function AdminProductsPage() {
         slug: form.slug || form.name.toLowerCase().replace(/\s+/g, "-"),
         description: form.description,
         price: parseFloat(form.price),
-        image: "",
+        image: form.image || `https://placehold.co/400x400/0f172a/ffffff?text=${encodeURIComponent(form.name[0])}`,
         category: form.category,
         stock: parseInt(form.stock),
       };
@@ -55,6 +56,7 @@ export default function AdminProductsPage() {
       price: product.price.toString(),
       category: product.category,
       stock: product.stock.toString(),
+      image: product.image || "",
     });
     setEditId(product.id);
     setShowForm(true);
@@ -107,15 +109,29 @@ export default function AdminProductsPage() {
               <input type="number" required value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20" />
             </div>
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+              <input type="text" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} placeholder="https://..." className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20" />
+            </div>
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
               <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20">
                 {getCategories().map((cat) => (<option key={cat} value={cat}>{cat}</option>))}
               </select>
             </div>
           </div>
-          <button type="submit" className="px-6 py-2.5 bg-secondary hover:bg-secondary/90 text-white font-medium rounded-lg transition-all">
-            {editId ? "Update Product" : "Add Product"}
-          </button>
+          {form.image && (
+            <div className="sm:col-span-2">
+              <img src={form.image} alt="Preview" className="h-20 w-20 object-cover rounded-lg border border-gray-200" />
+            </div>
+          )}
+          <div className="flex gap-3">
+            <button type="submit" className="px-6 py-2.5 bg-secondary hover:bg-secondary/90 text-white font-medium rounded-lg transition-all">
+              {editId ? "Update Product" : "Add Product"}
+            </button>
+            <button type="button" onClick={resetForm} className="px-6 py-2.5 border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium rounded-lg transition-all">
+              Cancel
+            </button>
+          </div>
         </form>
       )}
 

@@ -24,6 +24,7 @@ const statusColors: Record<string, string> = {
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [statusFilter, setStatusFilter] = useState("All");
 
   useEffect(() => {
     const stored = localStorage.getItem("orders");
@@ -36,52 +37,71 @@ export default function AdminOrdersPage() {
     localStorage.setItem("orders", JSON.stringify(updated));
   };
 
+  const filtered = statusFilter === "All" ? orders : orders.filter((o) => o.status === statusFilter);
+
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Orders</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
+          <p className="text-sm text-gray-400 mt-1">{orders.length} total</p>
+        </div>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
+        >
+          <option value="All">All Statuses</option>
+          {statuses.map((s) => (
+            <option key={s} value={s}>{s} ({orders.filter((o) => o.status === s).length})</option>
+          ))}
+        </select>
+      </div>
       <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Order ID</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Customer</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Total</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Payment</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-500">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                <td className="px-4 py-3 font-mono text-xs text-gray-900">#{order.id}</td>
-                <td className="px-4 py-3">
-                  <p className="font-medium text-gray-900">{order.customerName}</p>
-                  <p className="text-xs text-gray-400">{order.email}</p>
-                </td>
-                <td className="px-4 py-3 font-medium text-gray-900">${order.total.toFixed(2)}</td>
-                <td className="px-4 py-3 text-gray-500">{order.paymentMethod}</td>
-                <td className="px-4 py-3">
-                  <select
-                    value={order.status}
-                    onChange={(e) => updateStatus(order.id, e.target.value)}
-                    className={`px-2 py-1 rounded-full text-xs font-medium border-0 cursor-pointer ${statusColors[order.status] || "bg-gray-100 text-gray-700"}`}
-                  >
-                    {statuses.map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </select>
-                </td>
-                <td className="px-4 py-3 text-xs text-gray-400">{order.date}</td>
+        {filtered.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-300 text-4xl mb-3">📦</p>
+            <p className="text-gray-400 text-sm">{statusFilter === "All" ? "No orders yet" : `No ${statusFilter.toLowerCase()} orders`}</p>
+          </div>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-gray-50 border-b border-gray-100">
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Order ID</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Customer</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Total</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Payment</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
+                <th className="text-left px-4 py-3 font-medium text-gray-500">Date</th>
               </tr>
-            ))}
-            {orders.length === 0 && (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-gray-400 text-sm">No orders yet</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filtered.map((order) => (
+                <tr key={order.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                  <td className="px-4 py-3 font-mono text-xs text-gray-900">#{order.id}</td>
+                  <td className="px-4 py-3">
+                    <p className="font-medium text-gray-900">{order.customerName}</p>
+                    <p className="text-xs text-gray-400">{order.email}</p>
+                  </td>
+                  <td className="px-4 py-3 font-medium text-gray-900">${order.total.toFixed(2)}</td>
+                  <td className="px-4 py-3 text-gray-500">{order.paymentMethod}</td>
+                  <td className="px-4 py-3">
+                    <select
+                      value={order.status}
+                      onChange={(e) => updateStatus(order.id, e.target.value)}
+                      className={`px-2 py-1 rounded-full text-xs font-medium border-0 cursor-pointer ${statusColors[order.status] || "bg-gray-100 text-gray-700"}`}
+                    >
+                      {statuses.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </td>
+                  <td className="px-4 py-3 text-xs text-gray-400">{order.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

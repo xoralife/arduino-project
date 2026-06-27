@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 
 export default function CheckoutPage() {
-  const router = useRouter();
   const { items, totalPrice, clearCart } = useCart();
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderNumber, setOrderNumber] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -37,7 +36,27 @@ export default function CheckoutPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const order = {
+      id: Date.now().toString(36).toUpperCase(),
+      customerName: form.name,
+      email: form.email,
+      phone: form.phone,
+      address: form.address,
+      city: form.city,
+      paymentMethod: form.paymentMethod === "cod" ? "Cash on Delivery" : form.paymentMethod === "easypaisa" ? "Easypaisa" : "Credit / Debit Card",
+      total: parseFloat((totalPrice + shipping).toFixed(2)),
+      status: "Pending",
+      date: new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
+      items: items.map((i) => ({ name: i.name, quantity: i.quantity, price: i.price })),
+    };
+
+    const existing = JSON.parse(localStorage.getItem("orders") || "[]");
+    existing.unshift(order);
+    localStorage.setItem("orders", JSON.stringify(existing));
+
     clearCart();
+    setOrderNumber(order.id);
     setOrderPlaced(true);
   };
 
@@ -56,16 +75,19 @@ export default function CheckoutPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="mt-4 text-xl font-semibold text-gray-900">Order Placed Successfully!</h2>
-          <p className="mt-2 text-gray-500">
+          <h2 className="mt-4 text-xl font-semibold text-gray-900">Order Placed!</h2>
+          <p className="mt-1 text-sm text-gray-400">Order #{orderNumber}</p>
+          <p className="mt-3 text-gray-500 text-sm max-w-sm mx-auto">
             Thank you for your order. We will process it shortly and send you a confirmation email.
           </p>
-          <Link
-            href="/products"
-            className="mt-6 inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-all"
-          >
-            Continue Shopping
-          </Link>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/products"
+              className="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-primary/90 transition-all"
+            >
+              Continue Shopping
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -179,6 +201,20 @@ export default function CheckoutPage() {
                   <input
                     type="radio"
                     name="payment"
+                    value="easypaisa"
+                    checked={form.paymentMethod === "easypaisa"}
+                    onChange={() => setForm({ ...form, paymentMethod: "easypaisa" })}
+                    className="text-secondary focus:ring-secondary"
+                  />
+                  <div>
+                    <span className="text-sm font-medium text-gray-900">Easypaisa</span>
+                    <p className="text-xs text-gray-400">Send payment via Easypaisa</p>
+                  </div>
+                </label>
+                <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="radio"
+                    name="payment"
                     value="card"
                     checked={form.paymentMethod === "card"}
                     onChange={() => setForm({ ...form, paymentMethod: "card" })}
@@ -190,6 +226,17 @@ export default function CheckoutPage() {
                   </div>
                 </label>
               </div>
+
+              {form.paymentMethod === "easypaisa" && (
+                <div className="mt-4 p-4 bg-secondary/5 border border-secondary/20 rounded-xl">
+                  <p className="text-sm font-medium text-secondary mb-2">Send payment to:</p>
+                  <div className="space-y-1 text-sm text-gray-600">
+                    <p><span className="font-medium">Easypaisa Account:</span> 03XX-XXXXXXX</p>
+                    <p><span className="font-medium">Account Name:</span> ElectroKit Hub</p>
+                  </div>
+                  <p className="mt-2 text-xs text-gray-400">After sending payment, your order will be verified and processed.</p>
+                </div>
+              )}
             </div>
           </div>
 

@@ -1,6 +1,38 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
 
 export default function ContactPage() {
+  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) return;
+    const msg = { id: Date.now().toString(), ...form, date: new Date().toLocaleDateString() };
+    const existing = JSON.parse(localStorage.getItem("contact_messages") || "[]");
+    existing.unshift(msg);
+    localStorage.setItem("contact_messages", JSON.stringify(existing));
+    setSubmitted(true);
+  };
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="text-center max-w-md">
+          <div className="w-16 h-16 mx-auto bg-secondary/10 rounded-full flex items-center justify-center">
+            <svg className="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h2 className="mt-4 text-xl font-semibold text-gray-900">Message Sent!</h2>
+          <p className="mt-2 text-sm text-gray-500">Thank you for reaching out. We will get back to you within 24 hours.</p>
+          <Link href="/" className="mt-6 inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-all text-sm">Back to Home</Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="bg-surface border-b border-gray-100">
@@ -15,12 +47,8 @@ export default function ContactPage() {
           <div className="space-y-8">
             <div>
               <h2 className="text-lg font-semibold text-gray-900 mb-3">Get in Touch</h2>
-              <p className="text-sm text-gray-500 leading-relaxed">
-                Have a question about our products, need help with a project, or want to
-                collaborate? Send us a message and we will get back to you within 24 hours.
-              </p>
+              <p className="text-sm text-gray-500">Have a question? Send us a message and we will get back to you within 24 hours.</p>
             </div>
-
             <div className="space-y-4">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center shrink-0">
@@ -59,27 +87,23 @@ export default function ContactPage() {
             </div>
           </div>
 
-          <div>
-            <div className="bg-white rounded-xl border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Send a Message</h2>
-              <form className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                  <input type="text" required className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input type="email" required className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                  <textarea required rows={4} className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" />
-                </div>
-                <button type="submit" className="px-6 py-2.5 bg-secondary hover:bg-secondary/90 text-white font-medium rounded-lg transition-all text-sm">
-                  Send Message
-                </button>
-              </form>
-            </div>
+          <div className="bg-white rounded-xl border border-gray-100 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Send a Message</h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" placeholder="Your name" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" placeholder="you@example.com" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                <textarea required rows={4} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 text-sm" placeholder="How can we help?" />
+              </div>
+              <button type="submit" className="px-6 py-2.5 bg-secondary hover:bg-secondary/90 text-white font-medium rounded-lg transition-all text-sm">Send Message</button>
+            </form>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 
@@ -8,6 +8,7 @@ export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
+  const [settings, setSettings] = useState({ freeShippingThreshold: 50, shippingRate: 5.99 });
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -16,6 +17,19 @@ export default function CheckoutPage() {
     city: "",
     paymentMethod: "cod",
   });
+
+  useEffect(() => {
+    const stored = localStorage.getItem("store_settings");
+    if (stored) {
+      try {
+        const s = JSON.parse(stored);
+        setSettings({
+          freeShippingThreshold: parseFloat(s.freeShippingThreshold) || 50,
+          shippingRate: parseFloat(s.shippingRate) || 5.99,
+        });
+      } catch {}
+    }
+  }, []);
 
   if (items.length === 0 && !orderPlaced) {
     return (
@@ -93,7 +107,7 @@ export default function CheckoutPage() {
     );
   }
 
-  const shipping = totalPrice > 50 ? 0 : 5.99;
+  const shipping = totalPrice > settings.freeShippingThreshold ? 0 : settings.shippingRate;
   const total = totalPrice + shipping;
 
   return (

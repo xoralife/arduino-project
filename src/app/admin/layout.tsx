@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 const sidebarLinks = [
   { label: "Dashboard", href: "/admin", icon: "📊" },
   { label: "Products", href: "/admin/products", icon: "📦" },
+  { label: "Categories", href: "/admin/categories", icon: "🏷️" },
   { label: "Orders", href: "/admin/orders", icon: "📋" },
   { label: "Users", href: "/admin/users", icon: "👥" },
   { label: "Reviews", href: "/admin/reviews", icon: "⭐" },

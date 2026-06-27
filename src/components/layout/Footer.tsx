@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const footerLinks = {
@@ -20,13 +23,31 @@ const footerLinks = {
 };
 
 export default function Footer() {
+  const [storeName, setStoreName] = useState("ElectroKit Hub");
+  const [storeNamePart1, setStoreNamePart1] = useState("Electro");
+  const [storeNamePart2, setStoreNamePart2] = useState("Kit Hub");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("store_settings");
+    if (stored) {
+      try {
+        const s = JSON.parse(stored);
+        if (s.storeName) {
+          setStoreName(s.storeName);
+          const parts = s.storeName.split(" ");
+          setStoreNamePart1(parts[0]);
+          setStoreNamePart2(parts.slice(1).join(" "));
+        }
+      } catch {}
+    }
+  }, []);
   return (
     <footer className="bg-primary text-gray-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="text-xl font-bold text-white tracking-tight">
-              <span className="text-accent">Electro</span>Kit Hub
+              <span className="text-accent">{storeNamePart1}</span> {storeNamePart2}
             </Link>
             <p className="mt-3 text-sm text-gray-500 leading-relaxed max-w-xs">
               Your trusted source for Arduino boards, sensors, kits, and soldering equipment.
@@ -86,7 +107,7 @@ export default function Footer() {
         </div>
         <div className="mt-12 pt-8 border-t border-white/5 text-center">
           <p className="text-sm text-gray-600">
-            &copy; {new Date().getFullYear()} ElectroKit Hub. All rights reserved.
+            &copy; {new Date().getFullYear()} {storeName}. All rights reserved.
           </p>
         </div>
       </div>

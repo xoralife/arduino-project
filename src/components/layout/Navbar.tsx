@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
@@ -15,8 +15,19 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [storeName, setStoreName] = useState("ElectroKit Hub");
   const { totalItems } = useCart();
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
+
+  useEffect(() => {
+    const stored = localStorage.getItem("store_settings");
+    if (stored) {
+      try {
+        const s = JSON.parse(stored);
+        if (s.storeName) setStoreName(s.storeName);
+      } catch {}
+    }
+  }, []);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-primary/80 backdrop-blur-lg border-b border-white/10 text-white">
@@ -24,7 +35,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold tracking-tight">
-              <span className="text-accent">Electro</span>Kit Hub
+              <span className="text-accent">{storeName.split(" ")[0]}</span> {storeName.split(" ").slice(1).join(" ")}
             </span>
           </Link>
 

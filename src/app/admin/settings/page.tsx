@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState({
@@ -17,8 +17,16 @@ export default function AdminSettingsPage() {
 
   const [saved, setSaved] = useState(false);
 
+  useEffect(() => {
+    const stored = localStorage.getItem("store_settings");
+    if (stored) {
+      try { setSettings(JSON.parse(stored)); } catch {}
+    }
+  }, []);
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    localStorage.setItem("store_settings", JSON.stringify(settings));
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };

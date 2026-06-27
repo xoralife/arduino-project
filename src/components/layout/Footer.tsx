@@ -10,8 +10,6 @@ const footerLinks = {
   support: [
     { label: "Contact Us", href: "/contact" },
     { label: "FAQ", href: "/faq" },
-    { label: "Shipping Info", href: "/shipping" },
-    { label: "Returns", href: "/returns" },
   ],
   company: [
     { label: "About Us", href: "/about" },

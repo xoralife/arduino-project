@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import FeedbackSection from "@/components/blog/FeedbackSection";
 
 const posts = [
   {
@@ -315,6 +316,8 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
             {post.content}
           </div>
         </article>
+
+        <FeedbackSection postSlug={post.slug} />
 
         <div className="mt-12 pt-8 border-t border-gray-100">
           <Link
